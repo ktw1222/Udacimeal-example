@@ -50,6 +50,7 @@ class App extends Component {
         loadingFood: false,
       })))
   }
+
   openIngredientsModal = () => this.setState(() => ({ ingredientsModalOpen: true }))
   closeIngredientsModal = () => this.setState(() => ({ ingredientsModalOpen: false }))
   generateShoppingList = () => {
@@ -66,22 +67,31 @@ class App extends Component {
   }
 
   render() {
-    const { foodModalOpen, loadingFood, food } = this.state
+    const { foodModalOpen, loadingFood, food, ingredientsModalOpen } = this.state
     const { calendar, remove, selectRecipe } = this.props
     const mealOrder = ['breakfast', 'lunch', 'dinner']
 
     return (
       <div className='container'>
 
-       <ul className='meal-types'>
+        <div className='nav'>
+          <h1 className='header'>UdaciMeals</h1>
+          <button
+            className='shopping-list'
+            onClick={this.openIngredientsModal}>
+              Shopping List
+          </button>
+        </div>
+
+        <ul className='meal-types'>
          {mealOrder.map((mealType) => (
            <li key={mealType} className='subheader'>
              {capitalize(mealType)}
            </li>
          ))}
-       </ul>
+        </ul>
 
-       <div className='calendar'>
+        <div className='calendar'>
          <div className='days'>
            {calendar.map(({ day }) => <h3 key={day} className='subheader'>{capitalize(day)}</h3>)}
          </div>
@@ -102,8 +112,8 @@ class App extends Component {
                ))}
              </ul>
            ))}
-         </div>
-       </div>
+          </div>
+        </div>
 
        <Modal
           className='modal'
@@ -142,6 +152,16 @@ class App extends Component {
                     />)}
                 </div>}
           </div>
+        </Modal>
+
+        <Modal
+          className='modal'
+          overlayClassName='overlay'
+          isOpen={ingredientsModalOpen}
+          onRequestClose={this.closeIngredientsModal}
+          contentLabel='Modal'
+        >
+          {ingredientsModalOpen && <ShoppingList list={this.generateShoppingList()}/>}
         </Modal>
 
      </div>
